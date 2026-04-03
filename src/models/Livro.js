@@ -17,8 +17,7 @@ const Livro = sequelize.define('Livro', {
   },
 }, {
   tableName: 'livros',
-  timestamps: true,
-  underscored: false,
+  timestamps: false,
 });
 
 module.exports = Livro;

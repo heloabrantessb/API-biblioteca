@@ -10,7 +10,7 @@ describe("Funcionalidades de Empréstimos", () => {
         const res = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
-            data_devolucao_prevista: "2025-05-01",
+            data_prevista_devolucao_prevista: "2025-05-01",
         });
         expect(res.status).toBe(201);
         expect(res.data).toHaveProperty("id");
@@ -28,7 +28,7 @@ describe("Funcionalidades de Empréstimos", () => {
         const criado = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
-            data_devolucao_prevista: "2025-06-01"
+            data_prevista_devolucao_prevista: "2025-06-01"
         });
         const id = criado.data.id;
 
@@ -48,7 +48,7 @@ describe("Funcionalidades de Empréstimos", () => {
         const criado = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
-            data_devolucao_prevista: "2025-06-01"
+            data_prevista_devolucao_prevista: "2025-06-01"
         });
         const id = criado.data.id;
 
@@ -56,7 +56,7 @@ describe("Funcionalidades de Empréstimos", () => {
         expect(res.status).toEqual(200);
         expect(res.data.livro_id).toBe(LIVRO_ID)
         expect(res.data.usuario_id).toBe(USUARIO_ID)
-        expect(res.data.data_devolucao_prevista).toBe("2025-06-01")
+        expect(res.data.data_prevista_devolucao_prevista).toBe("2025-06-01")
     });
     
     test("deve retornar 404 para empréstimo inexistente", async () => {
@@ -71,7 +71,7 @@ describe("Funcionalidades de Empréstimos", () => {
         try {
             await axios.post(`${api}/emprestimos`, {
                 usuario_id: USUARIO_ID,
-                data_devolucao_prevista: "2025-05-01",
+                data_prevista_devolucao_prevista: "2025-05-01",
             });
         } catch (err) {
             expect(err.response.status).toBe(400);
@@ -82,7 +82,7 @@ describe("Funcionalidades de Empréstimos", () => {
         try { 
             await axios.post(`${api}/emprestimos`, {
                 livro_id: LIVRO_ID,
-                data_devolucao_prevista: "2025-06-01",
+                data_prevista_devolucao_prevista: "2025-06-01",
             })
         } catch (err) {
             expect(err.response.status).toBe(400)

@@ -12,6 +12,7 @@ describe('Funcionalidades de Livros', () => {
         expect(res.status).toEqual(201);
         expect(res.data.titulo).toBe("Clean Code");
         expect(res.data.autor).toBe("Robert C. Martin");
+        expect(res.data.disponivel).toBe(true);
 
         await axios.delete(`${api}/livros/${res.data.id}`);
     });
@@ -48,7 +49,8 @@ describe('Funcionalidades de Livros', () => {
 
         const res = await axios.patch(`${api}/livros/${id}`, {
             titulo: "Clean Code 2",
-            autor: "Robert C. Martin"
+            autor: "Robert C. Martin",
+            disponivel: false
         });
         expect(res.status).toEqual(200);
         expect(res.data.titulo).toBe("Clean Code 2");

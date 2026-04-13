@@ -6,8 +6,7 @@ const criarEmprestimo = async(livro_id, usuario_id, data_prevista_devolucao) => 
         id: emprestimo.id,
         livro_id: emprestimo.livro_id,
         usuario_id: emprestimo.usuario_id,
-        data_prevista_devolucao: emprestimo.data_prevista_devolucao,
-        data_prevista_devolucao_prevista: emprestimo.data_prevista_devolucao
+        data_prevista_devolucao: emprestimo.data_prevista_devolucao
     };
 }
 

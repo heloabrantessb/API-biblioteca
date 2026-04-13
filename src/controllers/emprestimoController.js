@@ -3,7 +3,7 @@ const emprestimoService = require('../services/emprestimoService')
 const criar = async (req, res) => {
     const { usuario_id, livro_id, data_prevista_devolucao } = req.body;
 
-    if(!usuario_id || !livro_id || data_prevista_devolucao) return res.status(400).json({error: "Todos os campos são obrigatórios"})
+    if(!usuario_id || !livro_id || !data_prevista_devolucao) return res.status(400).json({error: "Todos os campos são obrigatórios"})
 
     try {
         const emprestimo = await emprestimoService.criarEmprestimo(livro_id, usuario_id, data_prevista_devolucao)

@@ -16,7 +16,7 @@ const Emprestimo = sequelize.define('Emprestimo', {
         allowNull: false,
     },
     data_prevista_devolucao: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
     },
 }, {

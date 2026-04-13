@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
       },
       data_prevista_devolucao: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       }, 
     })

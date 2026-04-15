@@ -22,6 +22,17 @@ const atualizarLivro = async (id, titulo, autor) => {
     return livro;
 }
 
+const atualizarDisponibilidade = async (id) => {
+    const livro = await this.buscarLivroPorId(id);
+    if (!livro) return null;
+
+    if(livro.disponivel === true) livro.disponivel = false;
+    else livro.disponivel = true;
+
+    await livro.save();
+    return livro;
+}
+
 const deletarLivro = async (id) => {
     const livro = await Livro.findByPk(id);
     if (!livro) return false;
@@ -29,4 +40,4 @@ const deletarLivro = async (id) => {
     return true;
 }
 
-module.exports = { criarLivro, listarLivros, buscarLivroPorId, atualizarLivro, deletarLivro };
+module.exports = { criarLivro, listarLivros, buscarLivroPorId, atualizarLivro, deletarLivro, atualizarDisponibilidade};

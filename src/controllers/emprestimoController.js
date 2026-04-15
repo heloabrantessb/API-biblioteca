@@ -1,15 +1,16 @@
+const { now } = require('sequelize/lib/utils');
 const emprestimoService = require('../services/emprestimoService')
 
 const criar = async (req, res) => {
-    const { usuario_id, livro_id, data_prevista_devolucao } = req.body;
+    const { usuario_id, livro_id, data_prevista_devolucao, status } = req.body;
 
     if(!usuario_id || !livro_id || !data_prevista_devolucao) return res.status(400).json({error: "Todos os campos são obrigatórios"})
 
     try {
-        const emprestimo = await emprestimoService.criarEmprestimo(livro_id, usuario_id, data_prevista_devolucao)
+        const emprestimo = await emprestimoService.criarEmprestimo(livro_id, usuario_id, data_prevista_devolucao, status);
         return res.status(201).json(emprestimo);
     } catch (error) {
-        return res.status(500).json({ error: 'Erro ao criar empréstimo', detalhe: error.message });
+        return res.status(500).json({ error: 'Erro ao criar empréstimo', detalhe: error.message }); 
     }
 }
 
@@ -47,4 +48,19 @@ const deletar = async (req, res) => {
     }
 }
 
-module.exports = { criar, listar, buscarPorId, deletar}
+const devolver = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const data_devolucao = new Date(now());
+
+        await emprestimoService.registrarDevolucao(id, data_devolucao);
+
+        return res.status(200).json(emprestimo);
+
+    } catch (error) {
+        return res.status(500).json({error: "Erro ao registrar devolução", detalhe: error.message})
+    }
+}
+
+module.exports = { criar, listar, buscarPorId, deletar, devolver}

@@ -19,6 +19,10 @@ const Emprestimo = sequelize.define('Emprestimo', {
         type: DataTypes.DATEONLY,
         allowNull: false,
     },
+    status: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 }, {
     tableName: 'emprestimos',
     timestamps: false,

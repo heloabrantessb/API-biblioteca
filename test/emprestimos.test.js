@@ -4,6 +4,7 @@ const api = `http://localhost:${process.env.PORT || 3000}`;
 
 const LIVRO_ID = 1;
 const USUARIO_ID = 1;
+const STATUS = false;
 
 describe("Funcionalidades de Empréstimos", () => {
     test("deve registrar um novo empréstimo", async () => {
@@ -11,6 +12,7 @@ describe("Funcionalidades de Empréstimos", () => {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
             data_prevista_devolucao: "2025-05-01",
+            status: STATUS
         });
         expect(res.status).toBe(201);
         expect(res.data).toHaveProperty("id");
@@ -28,7 +30,8 @@ describe("Funcionalidades de Empréstimos", () => {
         const criado = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
-            data_prevista_devolucao: "2025-06-01"
+            data_prevista_devolucao: "2025-06-01",
+            status: STATUS
         });
         const id = criado.data.id;
 

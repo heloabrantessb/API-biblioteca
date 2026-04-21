@@ -1,16 +1,17 @@
-const { now } = require('sequelize/lib/utils');
 const emprestimoService = require('../services/emprestimoService')
+const { criarMulta } = require('../services/multaService');
+const { atualizarDisponibilidade } = require('../services/livroService');
 
 const criar = async (req, res) => {
-    const { usuario_id, livro_id, data_prevista_devolucao, status } = req.body;
+    const { livro_id, usuario_id, data_prevista_devolucao, status } = req.body;
 
     if(!usuario_id || !livro_id || !data_prevista_devolucao) return res.status(400).json({error: "Todos os campos são obrigatórios"})
 
     try {
-        const emprestimo = await emprestimoService.criarEmprestimo(livro_id, usuario_id, data_prevista_devolucao, status);
+        const emprestimo = await emprestimoService.criarEmprestimo(livro_id, usuario_id, data_prevista_devolucao, status)
         return res.status(201).json(emprestimo);
     } catch (error) {
-        return res.status(500).json({ error: 'Erro ao criar empréstimo', detalhe: error.message }); 
+        return res.status(500).json({ error: 'Erro ao criar empréstimo', detalhe: error.message });
     }
 }
 
@@ -23,7 +24,7 @@ const listar = async (req, res) => {
     }
 }
 
-const buscarPorId = async (req, res) => {
+const buscarPorId = async (req, res) => {   
     try {
         const { id } = req.params;
         const emprestimo = await emprestimoService.buscarEmprestimoPorId(id);
@@ -51,12 +52,31 @@ const deletar = async (req, res) => {
 const devolver = async (req, res) => {
     try {
         const { id } = req.params;
+        const { data_devolucao } = req.body;
 
-        const data_devolucao = new Date(now());
+        const emprestimo = await emprestimoService.buscarEmprestimoPorId(id);
+        if (!emprestimo) {
+            return res.status(404).json({ error: "Empréstimo não encontrado" });
+        }
 
-        await emprestimoService.registrarDevolucao(id, data_devolucao);
+        const data_prevista = new Date(emprestimo.data_prevista_devolucao);
+        const data_devolucao_date = new Date(data_devolucao);
 
-        return res.status(200).json(emprestimo);
+        const diferenca = data_devolucao_date - data_prevista;
+        const diasDiferenca = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
+
+        if (diasDiferenca > 0) {
+            const multa = await criarMulta(id, data_prevista, data_devolucao_date, false);
+
+            await atualizarDisponibilidade(emprestimo.livro_id, true);
+            await emprestimoService.atualizarStatus(id, false);
+
+            return res.status(201).json(multa);
+        } else {
+            await atualizarDisponibilidade(emprestimo.livro_id, true);
+            await emprestimoService.atualizarStatus(id, false);
+            return res.status(200).json({ message: "Devolução registrada sem multa" });
+        }
 
     } catch (error) {
         return res.status(500).json({error: "Erro ao registrar devolução", detalhe: error.message})

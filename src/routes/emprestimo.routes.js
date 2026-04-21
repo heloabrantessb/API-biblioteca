@@ -7,6 +7,6 @@ router.post("/", criar);
 router.get("/", listar);
 router.get("/:id", buscarPorId);
 router.delete("/:id", deletar);
-router.post('/:id/devolucao', devolver);
+router.post('/:id/devolver', devolver);
 
 module.exports = router; 

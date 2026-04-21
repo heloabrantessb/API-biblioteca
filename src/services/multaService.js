@@ -1,9 +1,9 @@
-const Multa = require("../models/Multa");
+const Multa = require("../models");
 
-const criarMulta = async (emprestimo_id, data_prevista_devolucao, data_devolucao) => {
-    const valorTotal = calcularValorMulta(data_prevista_devolucao, data_devolucao);
+const criarMulta = async (emprestimo_id, data_prevista_devolucao, data_devolucao, status) => {
+    const valor_total = calcularValorMulta(data_prevista_devolucao, data_devolucao);
 
-    const multa = await Multa.create({emprestimo_id, valorTotal, data_devolucao})
+    const multa = await Multa.create({emprestimo_id, valor_total, data_devolucao, status})
     return {
         id: multa.id,
         emprestimo_id: multa.emprestimo_id,
@@ -44,9 +44,12 @@ const calcularValorMulta = (data_prevista_devolucao, data_devolucao) => {
     const dataPrevista = new Date(data_prevista_devolucao);
     const dataDevolucao = new Date(data_devolucao);
 
-    const diasAtraso = dataDevolucao - dataPrevista;
+    const diffTime = dataDevolucao - dataPrevista;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    return diasAtraso * VALOR_POR_DIA;
+    if (diffDays <= 0) return 0;
+
+    return diffDays * VALOR_POR_DIA;
 }
 
 module.exports = { criarMulta, listarMultas, buscarMultaPorId, atualizarStatusMulta, deletarMulta}

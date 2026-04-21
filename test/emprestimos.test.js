@@ -4,14 +4,14 @@ const api = `http://localhost:${process.env.PORT || 3000}`;
 
 const LIVRO_ID = 1;
 const USUARIO_ID = 1;
-const STATUS = false;
+const STATUS = true;
 
 describe("Funcionalidades de Empréstimos", () => {
     test("deve registrar um novo empréstimo", async () => {
         const res = await axios.post(`${api}/emprestimos`, {
             livro_id: LIVRO_ID,
             usuario_id: USUARIO_ID,
-            data_prevista_devolucao: "2025-05-01",
+            data_prevista_devolucao: "2025-06-01",
             status: STATUS
         });
         expect(res.status).toBe(201);

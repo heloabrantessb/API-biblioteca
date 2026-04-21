@@ -22,13 +22,11 @@ const atualizarLivro = async (id, titulo, autor) => {
     return livro;
 }
 
-const atualizarDisponibilidade = async (id) => {
-    const livro = await this.buscarLivroPorId(id);
+const atualizarDisponibilidade = async (id, disponivel) => {
+    const livro = await buscarLivroPorId(id);
     if (!livro) return null;
 
-    if(livro.disponivel === true) livro.disponivel = false;
-    else livro.disponivel = true;
-
+    livro.disponivel = disponivel;
     await livro.save();
     return livro;
 }

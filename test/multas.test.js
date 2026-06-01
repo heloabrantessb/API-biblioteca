@@ -82,7 +82,16 @@ describe("Multas", () => {
     });
 
     test("deve buscar multa por id", async () => {
-        const criado = await axios.post(`${api}/emprestimos/${EMPRESTIMO_ID}/devolver`, {
+        const emprestimoCriado = await axios.post(`${api}/emprestimos`, {
+            livro_id: 1,
+            usuario_id: 1,
+            data_prevista_devolucao: "2025-06-01",
+            status: true
+        });
+        const empId = emprestimoCriado.data.id;
+
+        const criado = await axios.post(`${api}/emprestimos/${empId}/devolver`, {
+            data_prevista_devolucao: emprestimoCriado.data.data_prevista_devolucao,
             data_devolucao: "2025-06-03"
         });
         const id = criado.data.id;
@@ -90,6 +99,8 @@ describe("Multas", () => {
         const res = await axios.get(`${api}/multas/${id}`);
         expect(res.status).toBe(200);
         expect(res.data.id).toBe(id);
+
+        await axios.delete(`${api}/multas/${id}`);
     });
 
     test("deve retornar 404 para multa inexistente", async () => {
@@ -101,7 +112,16 @@ describe("Multas", () => {
     });
 
     test("deve deletar uma multa", async () => {
-        const criado = await axios.post(`${api}/emprestimos/${EMPRESTIMO_ID}/devolver`, {
+        const emprestimoCriado = await axios.post(`${api}/emprestimos`, {
+            livro_id: 1,
+            usuario_id: 1,
+            data_prevista_devolucao: "2025-06-01",
+            status: true
+        });
+        const empId = emprestimoCriado.data.id;
+
+        const criado = await axios.post(`${api}/emprestimos/${empId}/devolver`, {
+            data_prevista_devolucao: emprestimoCriado.data.data_prevista_devolucao,
             data_devolucao: "2025-06-03"
         });
         const id = criado.data.id;
@@ -110,5 +130,26 @@ describe("Multas", () => {
         expect(res.status).toBe(204);
     });
 
-    test("deve retornar multas por usuário", async () => {});
+    test("deve retornar multas por usuário", async () => {
+        const emprestimoCriado = await axios.post(`${api}/emprestimos`, {
+            livro_id: 1,
+            usuario_id: 1,
+            data_prevista_devolucao: "2025-06-01",
+            status: true
+        });
+        const empId = emprestimoCriado.data.id;
+
+        const criado = await axios.post(`${api}/emprestimos/${empId}/devolver`, {
+            data_prevista_devolucao: emprestimoCriado.data.data_prevista_devolucao,
+            data_devolucao: "2025-06-03"
+        });
+        const id = criado.data.id;
+
+        const res = await axios.get(`${api}/multas/usuario/1`);
+        expect(res.status).toBe(200);
+        expect(Array.isArray(res.data)).toBe(true);
+        expect(res.data.some(m => m.id === id)).toBe(true);
+
+        await axios.delete(`${api}/multas/${id}`);
+    });
 });

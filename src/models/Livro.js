@@ -22,7 +22,7 @@ const Livro = sequelize.define('Livro', {
   },
 }, {
   tableName: 'livros',
-  timestamps: false,
+  timestamps: true,
 });
 
 module.exports = Livro;

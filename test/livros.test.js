@@ -6,22 +6,22 @@ describe('Funcionalidades de Livros', () => {
     test('POST /livros - cria um livro', async () => {
         const res = await axios.post(`${api}/livros`, {
             titulo: "Clean Code",
-            autor: "Robert C. Martin"
+            autor: "Robert C. Martin",
         });
         
         expect(res.status).toEqual(201);
-        expect(res.data.titulo).toBe("Clean Code");
-        expect(res.data.autor).toBe("Robert C. Martin");
-        expect(res.data.disponivel).toBe(true);
+        expect(res.data.data.titulo).toBe("Clean Code");
+        expect(res.data.data.autor).toBe("Robert C. Martin");
+        expect(res.data.data.disponivel).toBe(true);
 
-        await axios.delete(`${api}/livros/${res.data.id}`);
+        await axios.delete(`${api}/livros/${res.data.data.id}`);
     });
 
     test('GET /livros - retorna todos os livros', async () => {
         const res = await axios.get(`${api}/livros`);
 
         expect(res.status).toEqual(200);
-        expect(Array.isArray(res.data)).toBe(true);
+        expect(Array.isArray(res.data.data)).toBe(true);
     });
 
     test('GET /livros/:id - retorna livro por id', async () => {
@@ -29,13 +29,13 @@ describe('Funcionalidades de Livros', () => {
             titulo: "Algoritmos",
             autor: "Ratinho da Silva"
         });
-        const id = livro.data.id;
+        const id = livro.data.data.id;
 
         const res = await axios.get(`${api}/livros/${id}`);
         
         expect(res.status).toEqual(200);
-        expect(res.data.titulo).toBe("Algoritmos");
-        expect(res.data.autor).toBe("Ratinho da Silva");
+        expect(res.data.data.titulo).toBe("Algoritmos");
+        expect(res.data.data.autor).toBe("Ratinho da Silva");
 
         await axios.delete(`${api}/livros/${id}`);
     });
@@ -45,7 +45,7 @@ describe('Funcionalidades de Livros', () => {
             titulo: "Clean Code",
             autor: "Robert C. Martin"
         });
-        const id = criado.data.id;
+        const id = criado.data.data.id;
 
         const res = await axios.patch(`${api}/livros/${id}`, {
             titulo: "Clean Code 2",
@@ -53,7 +53,7 @@ describe('Funcionalidades de Livros', () => {
             disponivel: false
         });
         expect(res.status).toEqual(200);
-        expect(res.data.titulo).toBe("Clean Code 2");
+        expect(res.data.data.titulo).toBe("Clean Code 2");
 
         await axios.delete(`${api}/livros/${id}`);
     });
@@ -63,7 +63,7 @@ describe('Funcionalidades de Livros', () => {
             titulo: "Para deletar",
             autor: "Autor"
         });
-        const id = criado.data.id;
+        const id = criado.data.data.id;
 
         const res = await axios.delete(`${api}/livros/${id}`);
         expect(res.status).toEqual(204);

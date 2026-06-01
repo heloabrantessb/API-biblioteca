@@ -37,11 +37,8 @@ class BaseController {
             message: message || 'Acesso negado!'
         });
     }
-    unauthorized(res, message) {
-        return res.status(401).json({ 
-            sucess: false,
-            message: message || 'Não autorizado!'
-        });
+    noContent(res) {
+        return res.status(204).send();
     }
 }
 

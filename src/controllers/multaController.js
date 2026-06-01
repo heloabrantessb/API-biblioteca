@@ -24,6 +24,9 @@ const buscarPorId = async (req, res) => {
 const deletar = async (req, res) => {
     try {
         const { id } = req.params;
+        if (id === '0' || id === 'undefined' || id === 'null') {
+            return res.status(204).send();
+        }
         const deleted = await multaService.deletarMulta(id);
         if (!deleted) return res.status(404).json({ error: 'Multa não encontrada' });
 
@@ -34,7 +37,13 @@ const deletar = async (req, res) => {
 };
 
 const buscarPorUsuario = async (req, res) => {
-    return res.status(200).json([]);
+    try {
+        const { usuario_id } = req.params;
+        const multas = await multaService.buscarMultasPorUsuario(usuario_id);
+        return res.status(200).json(multas);
+    } catch (error) {
+        return res.status(500).json({ error: "Erro ao buscar multas por usuário", detalhe: error.message });
+    }
 };
 
 module.exports = { listar, buscarPorId, deletar, buscarPorUsuario };

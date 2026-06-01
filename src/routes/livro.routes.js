@@ -1,11 +1,10 @@
 const { Router } = require('express');
-const LivroController = require('../controllers/livroController');
-
+const LivroController = require("../controllers/LivroController");
 const livroController = new LivroController();
 
 const router = Router();
 
-router.post("/", livroController.criar);
+router.post('/', livroController.criar);
 router.get("/", livroController.listar);
 router.get("/:id", livroController.buscarPorId);
 router.patch("/:id", livroController.atualizar);

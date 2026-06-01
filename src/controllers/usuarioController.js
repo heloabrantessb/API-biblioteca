@@ -3,6 +3,8 @@ const usuarioService = require('../services/usuarioService');
 const criar = async (req, res) => {
     const { nome, email, senha, tipo } = req.body;
 
+    console.log(res.data);
+
     if (!nome || !email || !senha || !tipo) return res.status(400).json({ error: 'Nome, email, senha e tipo são obrigatórios' });
 
     try {

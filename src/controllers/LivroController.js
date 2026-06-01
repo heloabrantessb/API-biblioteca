@@ -1,4 +1,4 @@
-const { criarLivro, listarLivros, buscarLivroPorId, atualizarLivro, deletarLivro } = require('../services/livroService');
+const livroService = require('../services/livroService');
 const BaseController = require('./BaseController');
 
 class LivroController extends BaseController {
@@ -9,7 +9,7 @@ class LivroController extends BaseController {
         if (!titulo || !autor) return this.badRequest(res, 'Título e autor são obrigatórios');
 
         try {
-            const livro = await criarLivro(titulo, autor, disponivel);
+            const livro = await livroService.criarLivro(titulo, autor, disponivel);
             return this.created(res, livro);
         } catch (error) {
             return this.internalError(res, error.message);
@@ -18,7 +18,7 @@ class LivroController extends BaseController {
 
     listar = async (req, res) => {
         try {
-            const livros = await listarLivros();
+            const livros = await livroService.listarLivros();
             return this.ok(res, livros);    
         } catch (error) {
             return this.internalError(res);
@@ -28,7 +28,7 @@ class LivroController extends BaseController {
     buscarPorId = async (req, res) => {
         try {
             const { id } = req.params;
-            const livro = await buscarLivroPorId(id);
+            const livro = await livroService.buscarLivroPorId(id);
 
             if (!livro)
                 return this.notFound(res, 'Livro não encontrado');
@@ -41,8 +41,8 @@ class LivroController extends BaseController {
     atualizar = async (req, res) => {
         try {
             const { id } = req.params;
-            const { titulo, autor } = req.body;
-            const livro = await atualizarLivro(id, titulo, autor);
+            const { titulo, autor, disponivel } = req.body;
+            const livro = await livroService.atualizarLivro(id, titulo, autor, disponivel);
             if (!livro) return this.notFound(res, 'Livro não encontrado');
             return this.ok(res, livro);
         } catch (error) {
@@ -53,9 +53,9 @@ class LivroController extends BaseController {
     deletar = async (req, res) => {
         try {
             const { id } = req.params;
-            const deleted = await deletarLivro(id);
+            const deleted = await livroService.deletarLivro(id);
             if (!deleted) return this.notFound(res, 'Livro não encontrado');
-            return this.ok(res, null, 'Livro deletado com sucesso');
+            return this.noContent(res);
         } catch (error) {
             return this.internalError(res);
         }

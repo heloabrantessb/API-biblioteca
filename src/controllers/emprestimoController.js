@@ -75,7 +75,7 @@ const devolver = async (req, res) => {
         } else {
             await atualizarDisponibilidade(emprestimo.livro_id, true);
             await emprestimoService.atualizarStatus(id, false);
-            return res.status(200).json({ message: "Devolução registrada sem multa" });
+            return res.status(200).json({ id: 0, valor_total: 0, status: false });
         }
 
     } catch (error) {

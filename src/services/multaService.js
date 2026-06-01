@@ -1,4 +1,4 @@
-const Multa = require("../models");
+const { Multa } = require("../models");
 
 const criarMulta = async (emprestimo_id, data_prevista_devolucao, data_devolucao, status) => {
     const valor_total = calcularValorMulta(data_prevista_devolucao, data_devolucao);
@@ -52,4 +52,12 @@ const calcularValorMulta = (data_prevista_devolucao, data_devolucao) => {
     return diffDays * VALOR_POR_DIA;
 }
 
-module.exports = { criarMulta, listarMultas, buscarMultaPorId, atualizarStatusMulta, deletarMulta}
+const buscarMultasPorUsuario = async (usuario_id) => {
+    const { Emprestimo } = require("../models");
+    const emprestimos = await Emprestimo.findAll({ where: { usuario_id } });
+    const emprestimoIds = emprestimos.map(e => e.id);
+    if (emprestimoIds.length === 0) return [];
+    return await Multa.findAll({ where: { emprestimo_id: emprestimoIds } });
+}
+
+module.exports = { criarMulta, listarMultas, buscarMultaPorId, atualizarStatusMulta, deletarMulta, buscarMultasPorUsuario }
